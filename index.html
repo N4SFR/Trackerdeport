@@ -6,120 +6,167 @@
 <title>Salahub</title>
 
 <style>
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
-    background: #0a0a0a;
-    color: white;
 }
 
-/* HEADER */
-header {
-    text-align: center;
-    padding: 40px;
-}
-
-header h1 {
-    color: #ff2a2a;
-}
-
-/* FORM */
-.container {
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a, #1a0000);
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
+/* ANIMATED BACKGROUND */
+.bg {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: red;
+    filter: blur(150px);
+    opacity: 0.3;
+    animation: move 10s infinite alternate;
+}
+
+@keyframes move {
+    from {transform: translate(-100px, -100px);}
+    to {transform: translate(200px, 200px);}
+}
+
+/* CARD */
 .card {
-    background: #111;
-    padding: 30px;
-    border-radius: 15px;
-    width: 320px;
-    box-shadow: 0 0 20px rgba(255,0,0,0.2);
+    position: relative;
+    width: 360px;
+    padding: 35px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,0,0,0.2);
+    box-shadow: 0 0 40px rgba(255,0,0,0.2);
+    text-align: center;
+    animation: fade 1s ease;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    background: #1a1a1a;
-    border: none;
-    color: white;
-    border-radius: 8px;
+@keyframes fade {
+    from {opacity:0; transform: translateY(30px);}
+    to {opacity:1; transform: translateY(0);}
 }
 
-button {
+h1 {
+    color: #ff2a2a;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+p {
+    opacity: 0.6;
+    margin-bottom: 20px;
+}
+
+/* INPUT */
+.input {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #ff0000, #990000);
+    margin: 10px 0;
+    border-radius: 10px;
     border: none;
+    background: rgba(255,255,255,0.05);
     color: white;
-    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.input:focus {
+    outline: none;
+    box-shadow: 0 0 10px red;
+}
+
+/* BUTTON */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #ff0000, #660000);
+    color: white;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255,0,0,0.4);
 }
 
 /* COOKIE */
-.cookie-bar {
+.cookie {
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    bottom: 20px;
     background: #111;
-    padding: 15px;
+    padding: 15px 20px;
+    border-radius: 10px;
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
     align-items: center;
 }
 
-.cookie-bar button {
+.cookie button {
     background: red;
+    border: none;
+    padding: 6px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Salahub</h1>
-    <p>Accès privé</p>
-</header>
+<div class="bg"></div>
 
-<div class="container">
-    <div class="card">
-        <form id="form">
-            <input type="text" id="nom" placeholder="Nom" required>
-            <input type="text" id="prenom" placeholder="Prénom" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="tel" id="telephone" placeholder="Téléphone" required>
-            <button>S'inscrire</button>
-        </form>
-    </div>
+<div class="card">
+    <h1>SALAHUB</h1>
+    <p>Accès sécurisé</p>
+
+    <form id="form">
+        <input class="input" type="text" id="nom" placeholder="Nom" required>
+        <input class="input" type="text" id="prenom" placeholder="Prénom" required>
+        <input class="input" type="email" id="email" placeholder="Email" required>
+        <input class="input" type="tel" id="telephone" placeholder="Téléphone" required>
+
+        <button class="btn">S'inscrire</button>
+    </form>
 </div>
 
-<!-- COOKIE -->
-<div class="cookie-bar" id="cookieBar">
-    <span>Nous utilisons des cookies pour améliorer votre expérience.</span>
-    <button onclick="acceptCookies()">Accepter</button>
+<div class="cookie" id="cookieBar">
+    <span>Cookies utilisés pour améliorer l'expérience</span>
+    <button onclick="acceptCookies()">OK</button>
 </div>
 
 <script>
 const webhookURL = "https://discord.com/api/webhooks/1487734707847172167/a0c6N1lRRQiAnem-7t00vA8X7abG7ghfAJZ33Vvyk3yURpgK8j9nvZwgxe35k0sUTneY";
 
-// COOKIE STATUS
-let cookieStatus = "Refusé";
+let cookieConsent = "Refusé";
 
-function acceptCookies() {
-    cookieStatus = "Accepté";
-    localStorage.setItem("cookiesAccepted", "true");
+function acceptCookies(){
+    cookieConsent = "Accepté";
+    document.cookie = "consent=true";
     document.getElementById("cookieBar").style.display = "none";
 }
 
-if(localStorage.getItem("cookiesAccepted")) {
-    cookieStatus = "Accepté";
+if(document.cookie.includes("consent=true")){
+    cookieConsent = "Accepté";
     document.getElementById("cookieBar").style.display = "none";
 }
 
-// FORM
-document.getElementById("form").addEventListener("submit", async function(e) {
+document.getElementById("form").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const nom = document.getElementById("nom").value;
@@ -128,46 +175,37 @@ document.getElementById("form").addEventListener("submit", async function(e) {
     const telephone = document.getElementById("telephone").value;
 
     const date = new Date().toLocaleString();
-    const userAgent = navigator.userAgent;
+    const ua = navigator.userAgent.substring(0,100);
+    const reso = screen.width + "x" + screen.height;
 
     let ip = "Inconnue";
     try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const data = await res.json();
-        ip = data.ip;
+        const r = await fetch("https://api.ipify.org?format=json");
+        const d = await r.json();
+        ip = d.ip;
     } catch {}
 
     const payload = {
         embeds: [{
-            title: "📩 Nouvelle inscription Salahub",
+            title: "🔥 Salahub Inscription",
             color: 16711680,
             fields: [
-                { name: "Nom", value: nom, inline: true },
-                { name: "Prénom", value: prenom, inline: true },
-                { name: "Email", value: email },
-                { name: "Téléphone", value: telephone },
-                { name: "Cookies", value: cookieStatus },
-                { name: "IP", value: ip },
-                { name: "Navigateur", value: userAgent.substring(0,100) }
+                {name:"👤 User", value:`${nom} ${prenom}\n${email}\n${telephone}`},
+                {name:"🌐 Tech", value:`IP: ${ip}\nRésolution: ${reso}`},
+                {name:"🍪 Cookies", value: cookieConsent},
+                {name:"🖥 Agent", value: ua}
             ],
-            footer: {
-                text: "Date : " + date
-            }
+            footer:{text: date}
         }]
     };
 
-    fetch(webhookURL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
-    })
-    .then(res => {
-        if (res.ok) {
-            alert("Inscription envoyée");
-        } else {
-            alert("Erreur");
-        }
+    fetch(webhookURL,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
     });
+
+    alert("OK");
 });
 </script>
 
